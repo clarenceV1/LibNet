@@ -25,7 +25,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile project(path: ':MyUtils')
+    compile project(path: ':LibUtils')
 
     //网络请求框架retrofit
     compile 'io.reactivex:rxandroid:1.1.0'
