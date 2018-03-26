@@ -1,6 +1,7 @@
 package com.example.clarence.netlibrary;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.clarence.utillibrary.log.LogFactory;
 
@@ -33,7 +34,7 @@ public class Net1 implements INet {
         HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
-                LogFactory.getInsatance().debug("logInterceptor", message);
+                Log.d("logInterceptor", message);
             }
         });
         logInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);

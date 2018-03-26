@@ -1,6 +1,7 @@
 package com.example.clarence.netlibrary;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.clarence.utillibrary.NetWorkUtil;
 import com.example.clarence.utillibrary.log.LogFactory;
@@ -29,7 +30,7 @@ class NetworkInterceptor implements Interceptor {
             request = request.newBuilder()
                     .cacheControl(CacheControl.FORCE_CACHE)
                     .build();
-            LogFactory.getInsatance().debug("Okhttp", "no network");
+            Log.d("Okhttp", "no network");
         }
         Response originalResponse = chain.proceed(request);
         if (NetWorkUtil.isNetConnected(context)) {
