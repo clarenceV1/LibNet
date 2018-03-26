@@ -20,8 +20,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Net1 implements INet {
     private Retrofit retrofit;
+    private Context context;
+    private String baseUrl;
 
-    public Net1(Context context, String baseUrl) {
+    protected Net1(Net1Build build) {
+        this.context = build.getContext();
+        this.baseUrl = build.getBaseUrl();
+        init();
+    }
+
+    private void init() {
         HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
@@ -50,8 +58,11 @@ public class Net1 implements INet {
                 .build();
     }
 
+
     @Override
     public Retrofit request() {
         return retrofit;
     }
+
+
 }
