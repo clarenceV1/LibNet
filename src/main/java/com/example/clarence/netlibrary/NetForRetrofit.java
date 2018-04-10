@@ -3,8 +3,6 @@ package com.example.clarence.netlibrary;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.clarence.utillibrary.log.LogFactory;
-
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
@@ -19,14 +17,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by clarence on 2018/3/22.
  */
 
-public class Net1 implements INet {
+public class NetForRetrofit implements INet {
     private Retrofit retrofit;
     private Context context;
     private String baseUrl;
 
-    protected Net1(Net1Build build) {
-        this.context = build.getContext();
-        this.baseUrl = build.getBaseUrl();
+    private NetForRetrofit(Builder builder) {
+        retrofit = builder.retrofit;
+        context = builder.context;
+        baseUrl = builder.baseUrl;
         init();
     }
 
@@ -66,4 +65,31 @@ public class Net1 implements INet {
     }
 
 
+    public static final class Builder {
+        private Retrofit retrofit;
+        private Context context;
+        private String baseUrl;
+
+        public Builder() {
+        }
+
+        public Builder retrofit(Retrofit val) {
+            retrofit = val;
+            return this;
+        }
+
+        public Builder context(Context val) {
+            context = val;
+            return this;
+        }
+
+        public Builder baseUrl(String val) {
+            baseUrl = val;
+            return this;
+        }
+
+        public NetForRetrofit build() {
+            return new NetForRetrofit(this);
+        }
+    }
 }
