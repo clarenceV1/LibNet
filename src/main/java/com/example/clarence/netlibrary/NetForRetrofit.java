@@ -3,6 +3,8 @@ package com.example.clarence.netlibrary;
 import android.content.Context;
 import android.util.Log;
 
+import com.facebook.stetho.okhttp3.StethoInterceptor;
+
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
@@ -47,6 +49,7 @@ public class NetForRetrofit implements INet {
                 .addInterceptor(new NetHeadInterceptor(context))
                 .addInterceptor(logInterceptor)
                 .addNetworkInterceptor(new NetworkInterceptor(context))
+                .addNetworkInterceptor(new StethoInterceptor())
                 .cache(cache)
                 .build();
 
