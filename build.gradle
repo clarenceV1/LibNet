@@ -24,9 +24,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile rootProject.ext.dependencies["junit"]
 
-    compile rootProject.ext.dependencies["rxandroid"]
-    compile rootProject.ext.dependencies["rxjava"]
-
     compile rootProject.ext.dependencies["retrofit"]
     compile rootProject.ext.dependencies["retrofit-adapter-rxjava2"]
     compile rootProject.ext.dependencies["retrofit-converter-gson"]
