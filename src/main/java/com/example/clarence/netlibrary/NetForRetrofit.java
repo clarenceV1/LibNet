@@ -8,6 +8,9 @@ import com.facebook.stetho.okhttp3.StethoInterceptor;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
+
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -51,6 +54,13 @@ public class NetForRetrofit implements INet {
                 .addNetworkInterceptor(new NetworkInterceptor(context))
                 .addNetworkInterceptor(new StethoInterceptor())
                 .cache(cache)
+                .hostnameVerifier(new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String hostname, SSLSession session) {
+                        return true;
+                    }
+                })
+                .sslSocketFactory(SocketFactory.createSSLSocketFactory())
                 .build();
 
         retrofit = new Retrofit.Builder()
