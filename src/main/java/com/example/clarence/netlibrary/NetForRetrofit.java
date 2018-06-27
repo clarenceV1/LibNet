@@ -6,12 +6,14 @@ import android.util.Log;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import java.io.File;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 
 import okhttp3.Cache;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -26,9 +28,9 @@ public class NetForRetrofit implements INet {
     private Retrofit retrofit;
     private Context context;
     private String baseUrl;
+    private OkHttpClient.Builder okHttpBuilder;
 
     private NetForRetrofit(Builder builder) {
-        retrofit = builder.retrofit;
         context = builder.context;
         baseUrl = builder.baseUrl;
         init();
@@ -46,12 +48,10 @@ public class NetForRetrofit implements INet {
         File cacheFile = new File(context.getCacheDir(), "cache");
         Cache cache = new Cache(cacheFile, 1024 * 1024 * 10); //100Mb
 
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+        okHttpBuilder = new OkHttpClient.Builder()
                 .readTimeout(30000, TimeUnit.MILLISECONDS)
                 .connectTimeout(30000, TimeUnit.MILLISECONDS)
-                .addInterceptor(new NetHeadInterceptor(context))
                 .addInterceptor(logInterceptor)
-                .addNetworkInterceptor(new NetworkInterceptor(context))
                 .addNetworkInterceptor(new StethoInterceptor())
                 .cache(cache)
                 .hostnameVerifier(new HostnameVerifier() {
@@ -60,35 +60,46 @@ public class NetForRetrofit implements INet {
                         return true;
                     }
                 })
-                .sslSocketFactory(SocketFactory.createSSLSocketFactory())
-                .build();
+                .sslSocketFactory(SocketFactory.createSSLSocketFactory());
+    }
 
-        retrofit = new Retrofit.Builder()
-                .client(okHttpClient)
+    @Override
+    public Retrofit request() {
+        addHeaderInterceptor(null);
+        retrofit = getRetrofit();
+        return retrofit;
+    }
+
+    @Override
+    public Retrofit request(Map<String, String> headerMap) {
+        addHeaderInterceptor(headerMap);
+        retrofit = getRetrofit();
+        return retrofit;
+    }
+
+    private void addHeaderInterceptor(Map<String, String> headerMap) {
+        NetHeaderInterceptor headerInterceptor = new NetHeaderInterceptor(context);
+        if (headerMap != null && headerMap.size() > 0) {
+            headerInterceptor.setHeaderMap(headerMap);
+        }
+        okHttpBuilder.addInterceptor(headerInterceptor);
+    }
+
+    public Retrofit getRetrofit() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .client(okHttpBuilder.build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl(baseUrl)
                 .build();
-    }
-
-
-    @Override
-    public Retrofit request() {
         return retrofit;
     }
 
-
     public static final class Builder {
-        private Retrofit retrofit;
         private Context context;
         private String baseUrl;
 
         public Builder() {
-        }
-
-        public Builder retrofit(Retrofit val) {
-            retrofit = val;
-            return this;
         }
 
         public Builder context(Context val) {

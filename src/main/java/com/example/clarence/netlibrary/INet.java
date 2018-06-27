@@ -1,5 +1,7 @@
 package com.example.clarence.netlibrary;
 
+import java.util.Map;
+
 import retrofit2.Retrofit;
 
 /**
@@ -8,4 +10,5 @@ import retrofit2.Retrofit;
 
 public interface INet {
     Retrofit request();
+    Retrofit request(Map<String, String> headerMap);
 }

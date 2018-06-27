@@ -27,8 +27,7 @@ class NetworkInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
         if (!NetWorkUtil.isNetConnected(context)) {
-            request = request.newBuilder()
-                    .cacheControl(CacheControl.FORCE_CACHE)
+            request = request.newBuilder().cacheControl(CacheControl.FORCE_CACHE)
                     .build();
             Log.d("Okhttp", "no network");
         }

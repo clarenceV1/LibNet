@@ -3,6 +3,7 @@ package com.example.clarence.netlibrary;
 import android.content.Context;
 
 import java.io.IOException;
+import java.util.Map;
 
 import okhttp3.Interceptor;
 import okhttp3.Response;
@@ -11,11 +12,16 @@ import okhttp3.Response;
  * Created by clarence on 2018/3/21.
  */
 
-public class NetHeadInterceptor implements Interceptor {
+public class NetHeaderInterceptor implements Interceptor {
     Context context;
+    Map<String, String> headerMap;
 
-    public NetHeadInterceptor(Context context) {
+    public NetHeaderInterceptor(Context context) {
         this.context = context;
+    }
+
+    public void setHeaderMap(Map<String, String> map) {
+        this.headerMap = headerMap;
     }
 
     @Override
