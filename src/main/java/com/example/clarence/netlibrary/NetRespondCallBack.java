@@ -4,7 +4,7 @@ import org.reactivestreams.Subscription;
 
 import io.reactivex.FlowableSubscriber;
 
-public abstract class NetRespondCallBack<T> implements INetCallBack, FlowableSubscriber<T> {
+public abstract class NetRespondCallBack<T> implements INetCallBack<T>, FlowableSubscriber<T> {
     Subscription subscription;
 
     @Override
